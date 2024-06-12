@@ -7,7 +7,6 @@ CREATE TABLE "Mission" (
     CONSTRAINT "Mission_pkey" PRIMARY KEY ("id")
 );
 
--- CreateTable
 CREATE TABLE "MissionCheck" (
     "id" SERIAL NOT NULL,
     "missionId" INTEGER NOT NULL,
@@ -15,6 +14,13 @@ CREATE TABLE "MissionCheck" (
     "checkType" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "MissionCheck_pkey" PRIMARY KEY ("id")
+);
+
+CREATE TABLE "User" (
+    "id" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

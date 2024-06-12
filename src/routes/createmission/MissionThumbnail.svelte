@@ -12,7 +12,11 @@
         const url = "/createmission";
         const data = { $checkTypeArray, mission_name };
         const response = await post(url, data);
-        console.log(response);
+
+        // 임시 alert
+        if (response.status) {
+            alert(response.message);
+        }
     }
 </script>
 
@@ -24,11 +28,11 @@
         </div>
 
         <div class="mission__thumbnail__content">
-            {#each $checkTypeArray as item, i}
+            {#each $checkTypeArray as { success_text, check_type }, i}
                 <label for="check_type_{i}">
-                    {item.success_text || "완료!"}
+                    {success_text || "완료!"}
                     <input
-                        type={item.check_type}
+                        type={check_type}
                         name="check_type_{i}"
                         id="check_type_{i}"
                     />

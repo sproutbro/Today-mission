@@ -1,37 +1,6 @@
-function addHiddenInput(form, name, value) {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = name;
-    input.value = value;
-    form.appendChild(input);
-}
+import bcrypt from "bcryptjs";
 
-function convertObjectToFormData(obj, form, parentKey = "") {
-    for (let key in obj) {
-        if (obj.hasOwnProperty(key)) {
-            let fullKey = parentKey ? `${parentKey}[${key}]` : key;
-            if (typeof obj[key] === "object" && !Array.isArray(obj[key])) {
-                convertObjectToFormData(obj[key], form, fullKey);
-            } else {
-                addHiddenInput(form, fullKey, obj[key]);
-            }
-        }
-    }
-}
-
-function convertArrayToFormData(arr, form, parentKey) {
-    arr.forEach((value, index) => {
-        let fullKey = `${parentKey}[${index}]`;
-        if (typeof value === "object" && !Array.isArray(value)) {
-            convertObjectToFormData(value, form, fullKey);
-        } else if (Array.isArray(value)) {
-            convertArrayToFormData(value, form, fullKey);
-        } else {
-            addHiddenInput(form, fullKey, value);
-        }
-    });
-}
-
+// Fetch post
 async function post(url, data) {
     try {
         const response = await fetch(url, {
@@ -45,4 +14,23 @@ async function post(url, data) {
     }
 }
 
-export { addHiddenInput, convertObjectToFormData, convertArrayToFormData, post }
+// Hash password
+async function hashPassword(password) {
+    try {
+        const salt = await bcrypt.genSalt(10);
+        return await bcrypt.hash(password, salt);
+    } catch (error) {
+        throw new Error('Error hashing password');
+    }
+}
+
+// Password verification
+async function checkPassword(password, hashedPassword) {
+    try {
+        return await bcrypt.compare(password, hashedPassword);
+    } catch (error) {
+        throw new Error('Error checking password');
+    }
+}
+
+export { post, hashPassword, checkPassword }
