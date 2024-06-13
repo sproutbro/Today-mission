@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 
-// Fetch post
+// POST fetch
 async function post(url, data) {
     try {
         const response = await fetch(url, {
@@ -10,26 +10,26 @@ async function post(url, data) {
         });
         return await response.json();
     } catch (error) {
-        console.error(error);
+        console.error("POST fetch 에러 : ", error);
     }
 }
 
-// Hash password
+// 비밀번호 해시
 async function hashPassword(password) {
     try {
         const salt = await bcrypt.genSalt(10);
         return await bcrypt.hash(password, salt);
     } catch (error) {
-        throw new Error('Error hashing password');
+        throw new Error('비밀번호 해시 에러');
     }
 }
 
-// Password verification
+// 비밀번호 체크
 async function checkPassword(password, hashedPassword) {
     try {
         return await bcrypt.compare(password, hashedPassword);
     } catch (error) {
-        throw new Error('Error checking password');
+        throw new Error('비밀번호 체크 에러');
     }
 }
 

@@ -3,15 +3,17 @@ import { insertMission, insertMissioncheck } from "$lib/db/mission.js";
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST(event) {
-    // User input data
+    // 사용자 입력 자료
     const { $checkTypeArray, mission_name } = await event.request.json();
+    // 사용자 아이디 저장
+    const userId = event.locals.user.id;
 
     try {
-        // Insert mission
-        const newMission = await insertMission(mission_name, "no_user");
+        // 미션 만들기
+        const newMission = await insertMission(mission_name, userId);
         console.log('New mission:', newMission);
 
-        // Insert missioncheck
+        // 미션 확인 만들기
         const missionId = newMission.id;
         const values = createCheckValues(missionId, $checkTypeArray);
         const result = await insertMissioncheck(values);
@@ -27,7 +29,7 @@ export async function POST(event) {
 function createCheckValues(missionId, checkTypeArray) {
     const values = []
     checkTypeArray.forEach((e) => {
-        values.push(`(${missionId}, '${e.success_message ? e.success_message : ""}', '${e.check_type}')`)
+        values.push(`(${missionId}, '${e.success_text ? e.success_text : ""}', '${e.check_type}')`)
     });
     return values;
 }
