@@ -14,28 +14,37 @@ export async function handle({ event, resolve }) {
             event.locals.user = user;
         } catch (err) {
             console.error('잘못된 토큰:', err);
+            event.cookies.delete('jwtToken', { path: '/' });
         }
     } else {
         // 비회원 아이피로 로그인
-        const nets = os.networkInterfaces();
-        let clientIp = "";
-
-        for (const name of Object.keys(nets)) {
-            for (const net of nets[name]) {
-                if (net.family === "IPv4" && !net.internal) {
-                    if (!clientIp) {
-                        clientIp = net.address;
-                    }
-                }
-            }
-        }
-
-        let stringIp = "";
-        clientIp.split('.').forEach((v) => {
-            stringIp += String.fromCharCode(Number(v) + 45032);
-        })
+        let stringIp = getClientIp();
         event.locals.user = { id: stringIp };
     }
 
     return await resolve(event);
+}
+
+
+function getClientIp() {
+    const nets = os.networkInterfaces();
+    let clientIp = "";
+
+    for (const name of Object.keys(nets)) {
+        for (const net of nets[name]) {
+            if (net.family === "IPv4" && !net.internal) {
+                if (!clientIp) {
+                    clientIp = net.address;
+                }
+            }
+        }
+    }
+
+    // 아이피 한글로변환
+    let stringIp = "";
+    clientIp.split('.').forEach((v) => {
+        stringIp += String.fromCharCode(Number(v) + 45032);
+    })
+
+    return stringIp;
 }
