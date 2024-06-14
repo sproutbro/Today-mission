@@ -39,18 +39,26 @@ async function insertMissioncheck(values) {
 async function getMissionbyId(userId) {
     const SQL = `
         SELECT
-            m."id",
-            m."missionName",
-            m."userId",
-            m."createdAt",
-            mc."missionId",
-            mc."successMessage",
-            mc."checkType"
+            "Mission".id,
+            "Mission"."missionName",
+            "Mission"."userId",
+            "Mission"."createdAt",
+            JSON_AGG(
+                JSON_BUILD_OBJECT(
+                    'message',
+                    "MissionCheck"."successMessage",
+                    'type',
+                    "MissionCheck"."checkType"
+                )
+            ) AS "MissionCheck"
         FROM
-            "Mission" m
-            JOIN "MissionCheck" mc ON m."id" = mc."missionId"
+            "Mission"
+            LEFT JOIN "MissionCheck" ON "Mission".id = "MissionCheck"."missionId"
         WHERE
-            m."userId" = '${userId}';
+            "Mission"."userId" = '${userId}'
+        GROUP BY
+            "Mission".id,
+            "Mission"."missionName";
     `;
 
     try {
