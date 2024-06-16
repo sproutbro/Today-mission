@@ -1,4 +1,4 @@
--- CreateTable
+-- 테이블 만들기
 CREATE TABLE "Mission" (
     "id" SERIAL NOT NULL,
     "missionName" TEXT NOT NULL,
@@ -23,12 +23,30 @@ CREATE TABLE "User" (
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
 
--- AddForeignKey
+CREATE TABLE "Friend" (
+    "userId" TEXT NOT NULL,
+    "friendId" TEXT NOT NULL,
+    "status" BOOLEAN NOT NULL DEFAULT false,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT "Friend_pkey" PRIMARY KEY ("friendId", "userId")
+);
+
+-- 관계 추가
 ALTER TABLE
     "MissionCheck"
 ADD
     CONSTRAINT "MissionCheck_missionId_fkey" FOREIGN KEY ("missionId") REFERENCES "Mission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
--- DropForeignKey
+ALTER TABLE
+    "Friend"
+ADD
+    CONSTRAINT "Friend_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE
+    "Friend"
+ADD
+    CONSTRAINT "Friend_friendId_fkey" FOREIGN KEY ("friendId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- 관계 삭제
 ALTER TABLE
     "MissionCheck" DROP CONSTRAINT "MissionCheck_missionId_fkey";

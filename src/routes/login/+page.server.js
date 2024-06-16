@@ -47,7 +47,7 @@ export const actions = {
 
             // 회원가입
             const newUser = await insertUser(id, password);
-            console.log('New user:', newUser);
+            console.log('회원가입 : ', newUser);
             return { status: 201, message: "회원가입이 완료되었습니다" }
         } catch (error) {
             console.error('사용자가입 오류 : ', error);

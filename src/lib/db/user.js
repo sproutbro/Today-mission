@@ -10,7 +10,7 @@ async function insertUser(id, password) {
     const params = [id, password];
     try {
         const result = await executeQuery(SQL, params);
-        console.log('User inserted:', result.rowCount);
+        console.log('회원가입 : ', result.rowCount);
         return result.rows[0];
     } catch (error) {
         console.error('회원가입 디비오류 : ', error);

@@ -8,13 +8,16 @@ export async function handle({ event, resolve }) {
 
     if (cookies.jwtToken) {
         const jwtToken = cookies.jwtToken.split(" ")[1];
-
         try {
             const user = jwt.verify(jwtToken, env.SECRET_KEY);
             event.locals.user = user;
         } catch (err) {
-            console.error('잘못된 토큰:', err);
-            event.cookies.delete('jwtToken', { path: '/' });
+            if (err.name === 'TokenExpiredError') {
+                console.log("토큰 만료");
+                event.cookies.delete('jwtToken', { path: '/' });
+            } else {
+                console.error('잘못된 토큰:', err);
+            }
         }
     } else {
         // 비회원 아이피로 로그인
