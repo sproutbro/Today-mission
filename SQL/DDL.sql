@@ -31,7 +31,19 @@ CREATE TABLE "Friend" (
     CONSTRAINT "Friend_pkey" PRIMARY KEY ("friendId", "userId")
 );
 
+CREATE TABLE "UserMission" (
+    "userId" TEXT NOT NULL,
+    "missionId" INTEGER NOT NULL,
+    "status" BOOLEAN NOT NULL DEFAULT false,
+    CONSTRAINT "UserMission_pkey" PRIMARY KEY ("userId", "missionId")
+);
+
 -- 관계 추가
+ALTER TABLE
+    "UserMission"
+ADD
+    CONSTRAINT "UserMission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 ALTER TABLE
     "MissionCheck"
 ADD

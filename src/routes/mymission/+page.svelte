@@ -1,28 +1,45 @@
 <script>
+    import { enhance } from "$app/forms";
+
     /** @type {import('./$types').PageData} */
     export let data;
 </script>
 
 <div>
     <h2>내가만든미션</h2>
-    {#if data.mission}
-        {#each data.mission as mission}
-            <div class="mission__example__box">
-                <div class="mission__example__title">
-                    <p>{mission.missionName}</p>
+    <form method="post" action="?/sendMission" use:enhance>
+        {#if data.mission}
+            {#each data.mission as mission}
+                <div class="mission__example__box">
+                    <input
+                        type="checkbox"
+                        name="{mission.id}"
+                        value={mission.id}
+                    />
+                    <div class="mission__example__title">
+                        <p>{mission.missionName}</p>
+                    </div>
+                    <div class="mission__example__content">
+                        {#each mission.MissionCheck as missionCheck}
+                            <label for="">
+                                {missionCheck.message}
+                                <input type={missionCheck.type} />
+                            </label>
+                            <br />
+                        {/each}
+                    </div>
                 </div>
-                <div class="mission__example__content">
-                    {#each mission.MissionCheck as missionCheck}
-                        <label for="">
-                            {missionCheck.message}
-                            <input type={missionCheck.type} />
-                        </label>
-                        <br />
-                    {/each}
-                </div>
-            </div>
-        {/each}
-    {/if}
+            {/each}
+        {/if}
+        {#if data?.friends}
+            <select name="friendId" id="friendId">
+                {#each data.friends as friend}
+                    <option value={friend}>{friend}</option>
+                {/each}
+            </select>
+            <button>미션보내기</button>
+        {/if}
+    </form>
 </div>
 
 <style>

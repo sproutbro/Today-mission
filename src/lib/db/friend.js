@@ -46,4 +46,43 @@ async function getFriends(userId) {
     }
 }
 
-export { addFriend, getFriends };
+// 친구요청 거절
+async function refuseFriendRequest(userId) {
+    const SQL = `
+        DELETE FROM
+            "Friend"
+        WHERE
+            "userId" = '${userId}';
+    `;
+    try {
+        const result = await executeQuery(SQL);
+        console.log('친구요청거절 DB(rowCount) : ', result.rowCount);
+        return result;
+    } catch (error) {
+        console.error('친구요청거절 디비오류 : ', error);
+        throw error;
+    }
+}
+
+// 친구요청 수락
+async function acceptFriendRequest(friendId, userId) {
+    const SQL = `
+        UPDATE
+            "Friend"
+        SET
+            "status" = true
+        WHERE
+            "userId" = '${friendId}'
+            AND "friendId" = '${userId}';
+    `;
+    try {
+        const result = await executeQuery(SQL);
+        console.log('친구요청승인 DB(rowCount) : ', result.rowCount);
+        return result;
+    } catch (error) {
+        console.error('친구요청승인 디비오류 : ', error);
+        throw error;
+    }
+}
+
+export { addFriend, getFriends, refuseFriendRequest, acceptFriendRequest };

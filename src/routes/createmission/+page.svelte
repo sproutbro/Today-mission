@@ -1,7 +1,6 @@
 <script>
     // Components
     import MissionCheckBox from "./MissionCheckBox.svelte";
-    import MissionExample from "./MissionExample.svelte";
     import MissionThumbnail from "./MissionThumbnail.svelte";
 
     // Input value
@@ -23,7 +22,6 @@
         </label>
         <MissionCheckBox />
     </div>
-    <MissionExample />
     <MissionThumbnail {mission_name} />
 </section>
 
