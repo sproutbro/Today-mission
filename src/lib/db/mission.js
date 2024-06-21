@@ -70,4 +70,23 @@ async function getMissionbyId(userId) {
     }
 }
 
-export { insertMission, insertMissioncheck, getMissionbyId }
+// 미션보내기
+async function insertUserMission(friendId, userId, missionId) {
+    const SQL = `
+        INSERT INTO
+            "UserMission" ("userId", "missionId", "sendUserId")
+        VALUES
+            ($1, $2, $3);
+    `;
+    const params = [friendId, missionId, userId];
+
+    try {
+        console.log("미션보내기 디비실행(userId) : ", userId);
+        return await executeQuery(SQL, params);
+    } catch (error) {
+        console.error('미션보내기 디비오류 : ', error);
+        throw error;
+        
+    }
+}
+export { insertMission, insertMissioncheck, getMissionbyId, insertUserMission }

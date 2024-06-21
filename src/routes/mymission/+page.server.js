@@ -1,4 +1,4 @@
-import { getMissionbyId, sendMission } from "$lib/db/mission.js";
+import { getMissionbyId, insertUserMission } from "$lib/db/mission.js";
 import { getFriends } from "$lib/db/friend.js";
 
 /** @type {import('./$types').PageServerLoad} */
@@ -30,12 +30,17 @@ export async function load(event) {
 export const actions = {
     // 미션 보내기
     sendMission: async (event) => {
-        const formData = Object.fromEntries(await event.request.formData());
-        console.log(formData)
+        const userId = event.locals.user.id;
+        const formData = await event.request.formData();
+        const friendId = formData.get("friendId");
+        const missionId = formData.getAll("missionId");
         try {
-            
+            const result = insertUserMission(friendId, userId, missionId);
+            console.log("미션보내기 실행(rowCount): ", result.rowCount);
+            return null;
         } catch (error) {
-            
+            console.error('미션보내기 오류 : ', error);
+            throw error;
         }
     }
 }

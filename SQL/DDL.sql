@@ -34,6 +34,9 @@ CREATE TABLE "Friend" (
 CREATE TABLE "UserMission" (
     "userId" TEXT NOT NULL,
     "missionId" INTEGER NOT NULL,
+    "frequency" VARCHAR(50) NOT NULL DEFAULT 'daily',
+    "interval" INTEGER NOT NULL DEFAULT 1,
+    "daysOfWeek" VARCHAR(50),
     "status" BOOLEAN NOT NULL DEFAULT false,
     CONSTRAINT "UserMission_pkey" PRIMARY KEY ("userId", "missionId")
 );
@@ -43,6 +46,11 @@ ALTER TABLE
     "UserMission"
 ADD
     CONSTRAINT "UserMission_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE
+    "UserMission"
+ADD
+    CONSTRAINT "UserMission_missionId_fkey" FOREIGN KEY ("missionId") REFERENCES "Mission"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 ALTER TABLE
     "MissionCheck"

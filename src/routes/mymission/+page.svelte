@@ -3,6 +3,8 @@
 
     /** @type {import('./$types').PageData} */
     export let data;
+
+    let missionId = [];
 </script>
 
 <div>
@@ -13,8 +15,9 @@
                 <div class="mission__example__box">
                     <input
                         type="checkbox"
-                        name="{mission.id}"
+                        name="missionId"
                         value={mission.id}
+                        bind:group={missionId}
                     />
                     <div class="mission__example__title">
                         <p>{mission.missionName}</p>

@@ -52,3 +52,9 @@ WHERE
 GROUP BY
     "Mission".id,
     "Mission"."missionName";
+
+-- 미션보내기
+INSERT INTO
+    "UserMission" ("userId", "missionId", "sendUserId")
+VALUES
+    ('1234', 65, '1111');
